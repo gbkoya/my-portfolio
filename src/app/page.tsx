@@ -3,7 +3,6 @@ import Hero from "../components/hero";
 import SkillsAndTools from "@/components/skillandtools";
 import Portfolio from "@/components/portfolio";
 import AboutMe from "@/components/about";
-import Image from "next/image";
 
 export default function Home() {
   return (
