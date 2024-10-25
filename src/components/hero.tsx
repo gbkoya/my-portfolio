@@ -89,12 +89,12 @@ export default function Hero() {
       >
         <div>
           <h1 className="lg:text-6xl text-3xl font-bold text-background dark:text-foreground lg:text-left text-center">
-            Hi, I'm <span className="text-[#5383e4]">Adekoya</span>
+            Hi, I&apos;m <span className="text-[#5383e4]">Adekoya</span>
             <span className="text-white px-3">Gbolahan</span>
           </h1>
           <p className="text-xl text-background dark:text-foreground mt-4 lg:text-left text-center lg:py-0 py-4">
-            I'm a web developer with a passion for building beautiful and functional
-            websites. I'm always looking for new challenges and opportunities to grow as a
+            I&apos;m a web developer with a passion for building beautiful and functional
+            websites. I&apos;m always looking for new challenges and opportunities to grow as a
             developer.
           </p>
           <div className="flex justify-center mt-4 lg:justify-start">
