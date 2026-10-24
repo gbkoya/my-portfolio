@@ -39,11 +39,25 @@ Adding a case study = appending one object to `caseStudies`; the home row, the
 
 Fully static — `next build` already produces prerendered HTML.
 
+**Node version:** `package.json` pins `engines.node` to `24.x` (and `.nvmrc` says 24).
+Vercel's `engines` field overrides the Project Settings dropdown, and Node 20 was
+disabled for new Vercel deployments on 2026-10-01 — do not remove this pin.
+
+**Canonical origin:** `src/lib/site-url.ts` resolves the site URL in this order:
+`NEXT_PUBLIC_SITE_URL` → `VERCEL_PROJECT_PRODUCTION_URL` → `VERCEL_URL` → localhost.
+Nothing is hard-coded. Once a custom domain exists, set `NEXT_PUBLIC_SITE_URL` in
+Vercel → Settings → Environment Variables so canonical URLs and OG tags use it.
+
+**Vercel:** import the repo and deploy as-is. No environment variables are required
+to build; the fonts are committed and served locally, not fetched from a CDN.
+
 **Hostinger / cPanel (no Node):** add `output: 'export'` to `next.config.mjs`,
 run `npm run build`, upload the generated `out/` folder. `images.unoptimized` is
 already set, which is what a static export requires.
 
-**Vercel:** import the repo and deploy as-is.
+**Share card:** `public/og.png` is generated, not hand-drawn — `scripts/make-og.py`
+rebuilds it in the site's own type (`scripts/og-fonts/`) with
+`uv run --with pillow python scripts/make-og.py`.
 
 ## Known gaps
 

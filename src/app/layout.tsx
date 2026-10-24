@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ogImage, siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 /* Self-hosted so the build never depends on a font CDN (and so it works
@@ -45,12 +46,15 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Adekoya Gbolahan — Full-stack developer, Lagos",
     template: "%s — Adekoya Gbolahan",
   },
   description:
     "Full-stack developer in Lagos building the software schools run on: a student information system serving 10,000+ students, school management platforms, and competition software. React, Next.js, TypeScript, Laravel.",
+  applicationName: "Adekoya Gbolahan",
+  alternates: { canonical: "/" },
   keywords: [
     "Adekoya Gbolahan",
     "full-stack developer Lagos",
@@ -63,17 +67,20 @@ export const metadata: Metadata = {
   creator: "Adekoya Gbolahan",
   openGraph: {
     type: "website",
+    url: siteUrl,
     title: "Adekoya Gbolahan — Full-stack developer, Lagos",
     description:
       "I build the software schools run on. React, Next.js, TypeScript and Laravel — student records for 10,000+ learners, school platforms, and competition software.",
     siteName: "Adekoya Gbolahan",
     locale: "en_NG",
+    images: [ogImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Adekoya Gbolahan — Full-stack developer, Lagos",
     description:
       "I build the software schools run on. React, Next.js, TypeScript and Laravel.",
+    images: [ogImage.url],
   },
   robots: { index: true, follow: true },
 };

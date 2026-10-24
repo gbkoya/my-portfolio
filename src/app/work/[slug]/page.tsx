@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import SiteHeader, { SiteFooter } from "@/components/site-chrome";
 import Plate from "@/components/plate";
 import { caseStudies, caseStudyBySlug } from "@/data/portfolio";
+import { ogImage, siteUrl } from "@/lib/site-url";
 
 type Params = { params: { slug: string } };
 
@@ -17,6 +18,14 @@ export function generateMetadata({ params }: Params): Metadata {
   return {
     title: `${study.title} — ${study.client}`,
     description: study.summary,
+    alternates: { canonical: `/work/${study.slug}` },
+    openGraph: {
+      type: "article",
+      title: `${study.title} — ${study.client}`,
+      description: study.summary,
+      url: `${siteUrl}/work/${study.slug}`,
+      images: [ogImage],
+    },
   };
 }
 

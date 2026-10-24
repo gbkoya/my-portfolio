@@ -312,8 +312,8 @@ body {
   }
   /* stack list: separator trails its item so line breaks never start with "·" */
   .stack-item::after {
-    content: "·";
-    padding-inline: 0.85rem;
+    content: " · ";
+    padding-inline: 0.3rem;
     color: var(--rule-strong);
   }
   .stack-item:last-child::after {
