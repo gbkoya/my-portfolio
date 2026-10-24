@@ -33,7 +33,7 @@ export const identity = {
   location: "Lagos, Nigeria",
   timezone: "Africa/Lagos",
   email: "adekoyaadetola365@gmail.com",
-  phone: "+234 813 026 2852",
+  phone: "+234 701 403 8948",
   thesis: "I build the software schools run on.",
   standfirst:
     "Four years of full-stack work — React, Next.js and Laravel — spent mostly on the systems behind education: student records for 10,000+ learners, school platforms, competition software. I studied microbiology, then illustrated children's lessons for two years, then learned to build the products myself. That order still shapes how I work.",

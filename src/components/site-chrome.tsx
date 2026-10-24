@@ -83,7 +83,14 @@ export function SiteFooter() {
               <LagosClock className="font-mono" />
             </dd>
             <dt className="eyebrow text-[#8f8a7d]">Phone</dt>
-            <dd className="font-mono">{identity.phone}</dd>
+            <dd>
+              <a
+                href={`tel:${identity.phone.replace(/\s+/g, "")}`}
+                className="font-mono underline decoration-[#4a453a] underline-offset-4 hover:decoration-paper-2"
+              >
+                {identity.phone}
+              </a>
+            </dd>
           </dl>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {[
