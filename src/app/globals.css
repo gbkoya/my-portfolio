@@ -2,26 +2,335 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   Design tokens. Warm engineering paper, one accent (brand indigo), one signal
+   (brand green, used only for live/availability dots). No dark-mode flip: the
+   paper is the design.
+--------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #e9e6dc;
+  --paper-2: #f2efe7;
+  --ink: #16140f;
+  --ink-soft: #5b574c;
+  --rule: #c7c2b2;
+  --rule-strong: #a9a392;
+  --accent: #1b09a2;
+  --night: #12100e;
+  --signal: #88d613;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--rule);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  /* hairline engineering-paper grid, felt more than seen */
+  background-image: linear-gradient(
+      to right,
+      rgba(22, 20, 15, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(22, 20, 15, 0.045) 1px, transparent 1px);
+  background-size: 88px 88px;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper-2);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@layer components {
+  /* page rail ------------------------------------------------------------- */
+  .rail {
+    width: 100%;
+    max-width: 1360px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px) {
+    .rail {
+      padding-inline: 48px;
+    }
+  }
+
+  /* mono eyebrow, always parenthesised in markup: ( The work ) -------------- */
+  .eyebrow {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+  }
+
+  /* display type ---------------------------------------------------------- */
+  .display {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* section heading pattern: eyebrow + big display + optional note --------- */
+  .section-head {
+    display: grid;
+    gap: 0.6rem;
+    padding-block: 2.75rem 1.75rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  /* lede / body ----------------------------------------------------------- */
+  .lede {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: 62ch;
+  }
+  .body-copy {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 68ch;
+  }
+
+  /* links ----------------------------------------------------------------- */
+  .quiet-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--rule-strong);
+    transition: text-decoration-color 0.18s ease, color 0.18s ease;
+  }
+  .quiet-link:hover {
+    text-decoration-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .accent-link {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+    transition: opacity 0.18s ease;
+  }
+  .accent-link:hover {
+    opacity: 0.65;
+  }
+
+  /* buttons --------------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.1rem;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    background: transparent;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .btn:hover {
+    background: var(--ink);
+    color: var(--paper-2);
+  }
+  .btn-solid {
+    background: var(--ink);
+    color: var(--paper-2);
+  }
+  .btn-solid:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* chips / tags ---------------------------------------------------------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+    padding: 0.2rem 0.5rem;
+    white-space: nowrap;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--signal);
+    box-shadow: 0 0 0 3px rgba(136, 214, 19, 0.22);
+    flex: none;
+  }
+
+  /* ledger rows ----------------------------------------------------------- */
+  .ledger-row {
+    border-top: 1px solid var(--rule);
+  }
+  .ledger-index {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    padding-top: 0.45rem;
+  }
+  .ledger-title {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+
+  /* plates: screenshot frame OR typographic spec sheet -------------------- */
+  .plate-frame {
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+  .plate-sheet {
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-2);
+    position: relative;
+  }
+  .plate-sheet::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid var(--rule);
+    pointer-events: none;
+  }
+  .plate-row {
+    display: grid;
+    grid-template-columns: minmax(5rem, 8.5rem) minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    border-bottom: 1px dashed var(--rule);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+  }
+  .plate-row:last-child {
+    border-bottom: 0;
+  }
+  .plate-key {
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.6875rem;
+  }
+
+  /* screenshot treatment: warm duotone-ish, colour returns on hover -------- */
+  .shot {
+    filter: grayscale(1) contrast(1.06) sepia(0.14);
+    transition: filter 0.45s ease, transform 0.6s ease;
+  }
+  .shot-wrap:hover .shot {
+    filter: none;
+    transform: scale(1.012);
+  }
+
+  .metric-value {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 62s linear infinite;
+  }
+  /* fades both edges so a mid-token cut reads as motion, not overflow */
+  .marquee-mask {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 6%,
+      #000 94%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 6%,
+      #000 94%,
+      transparent 100%
+    );
+  }
+  .marquee-band:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  /* stack list: separator trails its item so line breaks never start with "·" */
+  .stack-item::after {
+    content: "·";
+    padding-inline: 0.85rem;
+    color: var(--rule-strong);
+  }
+  .stack-item:last-child::after {
+    content: "";
+    padding: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

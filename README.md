@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# my-portfolio — Adekoya Gbolahan
 
-## Getting Started
+Personal portfolio. Next.js 14 (App Router) + TypeScript + Tailwind + framer-motion.
+Content lives in one file; the design tokens live in another. No CMS, no database.
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things are
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What it holds |
+|---|---|
+| `src/data/portfolio.ts` | **All content** — identity, links, stack, method, track record, and the four case studies (summary, spec, metrics, problem/built/outcome) |
+| `src/app/globals.css` | Design tokens (paper/ink/rule/accent) and component classes: `.display`, `.eyebrow`, `.mono`, `.plate-*`, `.ledger-*`, `.btn`, `.chip` |
+| `src/app/page.tsx` | Home: hero → stack strip → ledger → method → track record → elsewhere → footer |
+| `src/app/work/[slug]/page.tsx` | Case-study template, prerendered for each slug in the data file |
+| `src/components/ledger.tsx` | The four case studies as an index that opens in place (client component) |
+| `src/components/plate.tsx` | A "plate": framed screenshot, or a typographic spec sheet when there is no public UI to show |
+| `src/components/sections.tsx` | Stack strip, method, track record, elsewhere |
+| `src/components/site-chrome.tsx` | Header + dark footer |
+| `src/app/fonts/` | Self-hosted woff2 — Faculty Glyphic (display), Inter (body), IBM Plex Mono (labels) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Adding a case study = appending one object to `caseStudies`; the home row, the
+`/work/<slug>` page and the prerendered route all follow automatically.
 
-## Learn More
+## Design notes
 
-To learn more about Next.js, take a look at the following resources:
+- Fonts are self-hosted via `next/font/local`, so the build never calls a font CDN.
+- One accent colour (brand indigo `#1b09a2`), one signal colour (brand green, availability dots only).
+- Screenshots sit desaturated and return to full colour on hover (`.shot`).
+- Motion respects `prefers-reduced-motion`; the stack marquee pauses on hover.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Fully static — `next build` already produces prerendered HTML.
 
-## Deploy on Vercel
+**Hostinger / cPanel (no Node):** add `output: 'export'` to `next.config.mjs`,
+run `npm run build`, upload the generated `out/` folder. `images.unoptimized` is
+already set, which is what a static export requires.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Vercel:** import the repo and deploy as-is.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Known gaps
+
+- `public/adekoya-gbolahan-cv.pdf` is a copy of the current CV — replace it when the CV changes.
+- Education is listed as B.Sc Microbiology (McPherson University) on purpose: the
+  site treats the non-CS background as part of the story, not something to hide.
+- No contact form — contact is mailto/phone by choice, so there is nothing to spam.

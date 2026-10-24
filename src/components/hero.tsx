@@ -1,110 +1,75 @@
-'use client'
-import { useEffect } from 'react';
-import { motion } from 'framer-motion';
-
-interface Star {
-  x: number;
-  y: number;
-  radius: number;
-  speedX: number;
-  speedY: number;
-  color: string;
-}
+import Link from "next/link";
+import LagosClock from "@/components/lagos-clock";
+import { identity, links, stack } from "@/data/portfolio";
 
 export default function Hero() {
-  useEffect(() => {
-    // Star Animation
-    const canvas = document.getElementById('starCanvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) return;
-
-    const stars: Star[] = [];
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    const getRandomColor = () => {
-      const colors = ['#ff9a9e', '#fad0c4', '#a18cd1', '#fbc2eb', '#84fab0', '#8fd3f4', '#cfd9df'];
-      return colors[Math.floor(Math.random() * colors.length)];
-    };
-
-    const createStar = () => {
-      return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 2.5,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        color: getRandomColor(),
-      };
-    };
-
-    for (let i = 0; i < 150; i++) {
-      stars.push(createStar());
-    }
-
-    const animateStars = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      stars.forEach((star) => {
-        star.x += star.speedX;
-        star.y += star.speedY;
-
-        // Reverse direction when the star hits the edge of the canvas
-        if (star.x < 0 || star.x > canvas.width) star.speedX = -star.speedX;
-        if (star.y < 0 || star.y > canvas.height) star.speedY = -star.speedY;
-
-        // Draw the star with its color
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = star.color;
-        ctx.fill();
-      });
-
-      requestAnimationFrame(animateStars);
-    };
-
-    animateStars();
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-    };
-  }, []);
-
   return (
-    <section className="relative bg-foreground dark:bg-background lg:h-[80vh] h-[100vh]  flex items-center justify-start">
-      {/* Canvas for stars */}
-      <canvas id="starCanvas" className="absolute top-0 left-0 w-full h-full z-0"></canvas>
-
-      <motion.div
-        initial={{ x: -1000, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1.5 }}
-        className="container mx-auto px-4 z-10 lg:grid grid-cols-2 "
-      >
+    <section className="rail pb-12 pt-10 md:pb-16 md:pt-16">
+      <div className="grid gap-12 md:grid-cols-[1.55fr_1fr] md:gap-16">
         <div>
-          <h1 className="lg:text-6xl text-3xl font-bold text-background dark:text-foreground lg:text-left text-center">
-            Hi, I&apos;m <span className="text-[#5383e4]">Adekoya</span>
-            <span className="text-white px-3">Gbolahan</span>
+          <p className="eyebrow">( Portfolio )</p>
+          <h1 className="display mt-6 text-[clamp(2.35rem,7vw,5.4rem)]">
+            I build the software schools run on.
           </h1>
-          <p className="text-xl text-background dark:text-foreground mt-4 lg:text-left text-center lg:py-0 py-4">
-            I&apos;m a web developer with a passion for building beautiful and functional
-            websites. I&apos;m always looking for new challenges and opportunities to grow as a
-            developer.
-          </p>
-          <div className="flex justify-center mt-4 lg:justify-start">
-            <button className="text-white border rounded-md text-foreground  px-6 py-2 ">
-              Get in touch
-            </button>
+          <p className="lede mt-7">{identity.standfirst}</p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link href="/#work" className="btn btn-solid justify-center">
+              See the work ↓
+            </Link>
+            <a href={links.cv.href} className="btn justify-center">
+              Download CV
+            </a>
           </div>
         </div>
-      </motion.div>
+
+        <aside className="plate-sheet h-fit self-start">
+          <div className="flex items-center justify-between border-b border-rule-strong px-4 py-2">
+            <span className="eyebrow">( Spec )</span>
+            <span className="chip border-0 bg-transparent p-0">
+              <span className="dot" aria-hidden />
+              Available
+            </span>
+          </div>
+          <dl>
+            {[
+              ["Name", identity.name],
+              ["Role", identity.role],
+              ["Base", identity.location],
+            ].map(([k, v]) => (
+              <div className="plate-row" key={k}>
+                <dt className="plate-key">{k}</dt>
+                <dd className="text-ink">{v}</dd>
+              </div>
+            ))}
+            <div className="plate-row">
+              <dt className="plate-key">Local time</dt>
+              <dd>
+                <LagosClock className="font-mono text-ink" />
+              </dd>
+            </div>
+            <div className="plate-row items-start">
+              <dt className="plate-key pt-0.5">Core stack</dt>
+              <dd className="leading-relaxed text-ink">
+                {stack.slice(0, 6).join(" · ")}
+              </dd>
+            </div>
+          </dl>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rule-strong px-4 py-2.5">
+            <a href={`mailto:${identity.email}`} className="accent-link">
+              {identity.email}
+            </a>
+            <a
+              href={links.linkedin.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="eyebrow hover:text-ink"
+            >
+              LinkedIn ↗
+            </a>
+          </div>
+        </aside>
+      </div>
     </section>
   );
 }
-
